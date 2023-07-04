@@ -5,20 +5,23 @@ const getAlltodo = async (req, res) => {
     res.send(contact)
 }
 const postTodo = async (req, res) => {
-    const { task } = req.body
+
+    const { todotask } = req.body
+    console.log(todotask)
+    
     try {
-        const existingTask = await ToDoList.findOne({ todotask: task })
+        const existingTask = await ToDoList.findOne({ todotask:  todotask })
         if (existingTask) {
             return res.status(400).send("task is already present")
         }
-        if (!task) {
+        if (!todotask) {
             return res.status(400).send("task is required")
         }
         const todo = await ToDoList.create({
-            todotask: task
+            todotask: todotask
         })
         res.status(201).json(todo)
-        console.log(todo)
+        
     } catch (error) {
         console.log(error);
     }
@@ -26,15 +29,15 @@ const postTodo = async (req, res) => {
 const updateTodo = async (req, res) => {
     try {
         const todo = await ToDoList.findById(req.params.id)
-    if (!todo) {
-        return res.status(400).send("task is not present")
-    }
-    const updatedTodos = await ToDoList.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        { new: true }
-    );
-    res.send(updatedTodos);
+        if (!todo) {
+            return res.status(400).send("task is not present")
+        }
+        const updatedTodos = await ToDoList.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        res.send(updatedTodos);
     } catch (error) {
         console.log(error);
     }
