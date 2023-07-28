@@ -4,13 +4,26 @@ const getAlltodo = async (req, res) => {
     const contact = await ToDoList.find({})
     res.send(contact)
 }
+
+const specificTodo = async (req, res) => {
+
+    try {
+        const contact = await ToDoList.findById(req.params._id)
+        res.status(200).send(contact)
+
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
 const postTodo = async (req, res) => {
 
     const { todotask } = req.body
     console.log(todotask)
-    
+
     try {
-        const existingTask = await ToDoList.findOne({ todotask:  todotask })
+        const existingTask = await ToDoList.findOne({ todotask: todotask })
         if (existingTask) {
             return res.status(400).send("task is already present")
         }
@@ -21,7 +34,7 @@ const postTodo = async (req, res) => {
             todotask: todotask
         })
         res.status(201).json(todo)
-        
+
     } catch (error) {
         console.log(error);
     }
@@ -54,6 +67,6 @@ const deleteTodo = async (req, res) => {
     }
 }
 
-module.exports = { getAlltodo, postTodo, updateTodo, deleteTodo }
+module.exports = { getAlltodo, postTodo, updateTodo, deleteTodo, specificTodo }
 
 
